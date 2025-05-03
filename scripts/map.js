@@ -17,22 +17,16 @@ function init() {
     });
     
     // Iowa Mesonet WMS - Channel 2 Visible Satellite (GOES-19)
-    //var satelliteCh02 = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/goes_east.cgi', {
-        //layers: 'conus_ch02',
-        //format: 'image/png',
-        //transparent: true
-    //}).addTo(map);
-    
-    var satelliteCh02 = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'conus_ch02_visible',
+    var satelliteCh02 = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/goes_east.cgi', {
+        layers: 'conus_ch02',
         format: 'image/png',
         transparent: true
     }).addTo(map);
     
     var satelliteCh07 = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/goes_east.cgi', {
-        //layers: 'conus_ch07',
-        //format: 'image/png',
-        //transparent: true
+        layers: 'conus_ch07',
+        format: 'image/png',
+        transparent: true
    });
     
     // National Weather Service Alerts
@@ -52,18 +46,12 @@ function init() {
     });
 
     // Nexrad radar from Iowa State Mesonet
-    //var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
-        //layers: 'nexrad-n0r',
-        //format: 'image/png',
-        //transparent: true
-   //}).addTo(map);
-    
-    var nwsRadar = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'nexrad-n0r-900913',
+    var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
+        layers: 'nexrad-n0r',
         format: 'image/png',
         transparent: true
-    }).addTo(map);
-
+   }).addTo(map);
+    
     // United States basemap from AWS S3    
     var usBasemap = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/USBasemap3/{z}/{x}/{y}.png'); 
     
