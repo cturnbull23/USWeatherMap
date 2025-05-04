@@ -35,10 +35,12 @@ function init() {
         style: {
             fillColor: "#232323"
         }
-    }).addTo(map)
-      .on('load', function() { 
-          map.fitBounds(nwsAlerts);
-      });
+    });
+
+    L.Proj.geoJson(nwsAlerts).addTo(map)
+                             .on('load', function() { 
+                                 map.fitBounds(nwsAlerts);
+                             })
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
