@@ -55,6 +55,8 @@ function init() {
     // United States basemap from AWS S3    
     var usBasemap = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/USBasemap3/{z}/{x}/{y}.png'); 
 
+    var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
+    
     function usStatesStyle(feature) {
         return {
             color: "#1f78b4",
@@ -78,8 +80,6 @@ function init() {
     var usCounties = new L.geoJSON(usCountiesJson, {
         style: usCountiesStyle
     }).addTo(map);
-    
-    var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
 
     // variables for airports features for selection
     var airportsLayer;
