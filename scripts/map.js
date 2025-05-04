@@ -32,9 +32,10 @@ function init() {
     // NWS Alerts
     // Currently does not show countywide alerts, only polygons
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
+    var nwsAlerts;
     $.getJSON(nwsAlertsAPI, function(data) {
-        var nwsAlerts = L.geoJSON(data, {
-            style: function(feature) {
+       nwsAlerts =  L.geoJSON(data, {
+           style: function(feature) {
                 var alertColor = 'purple';
                 var alertWeight = 1
                 switch (feature.properties.event) {
