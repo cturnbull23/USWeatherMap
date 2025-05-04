@@ -54,12 +54,19 @@ function init() {
     
     // United States basemap from AWS S3    
     var usBasemap = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/USBasemap3/{z}/{x}/{y}.png'); 
+
+    function usStatesStyle(feature) {
+        return {
+            color: "#1f78b4",
+            weight: 3.25,
+            fill: false
+        };
+    }
     
-    var usStates = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'GEOG585:usStates4326',
-        format: 'image/png',
-        transparent: true
-    }).addTo(map);
+    var usStates = L.geoJSON(usStatesJson, {
+        style: usStatesStyle
+    });
+    usStates.addTo(map);
     
     var usCounties = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
         layers: 'GEOG585:usCounties4326',
