@@ -44,7 +44,7 @@ function init() {
       }
     });
     
-    fetch(nwsGeoJsonUrl)
+    fetch(nwsAlertsAPI)
       .then(res => res.json())
       .then(data => nwsAlerts.addData(data));
     
