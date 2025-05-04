@@ -32,13 +32,13 @@ function init() {
     var nwsAlerts = new L.WFS({
         url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?request=GetCapabilities&service=WFS',
         crs: L.CRS.EPSG3857,
-        style: function(feature) {
-            switch (feature.properties.Hazard_Type) {
-                case 'Red Flag Warning': return {fillColor: "#FF1493", fillOpacity: 0.5};
-                case 'Winter Weather Advisory': return {fillColor: "#7B68EE", fillOpacity: 0.5};
-            }
+        style: {
+            fillColor: "#232323"
         }
-    }).addTo(map).on('load', function() {map.fitBounds(nwsAlerts);});
+    }).addTo(map)
+      .on('load', function() { 
+          map.fitBounds(nwsAlerts);
+      });
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
