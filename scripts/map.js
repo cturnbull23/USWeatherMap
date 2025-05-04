@@ -35,9 +35,22 @@ function init() {
     $.getJSON(nwsAlertsAPI, function(data) {
         L.geoJSON(data, {
             style: function(feature) {
-                var alertColor = 'orange';
-                if (feature.properties.severe === 'Severe') alertColor = 'red';
-                return {color: alertColor}
+                var alertColor = 'purple';
+                var alertWeight = 1
+                switch (feature.properties.event) {
+                    case 'Severe Thunderstorm Warning': return {color: "#FFA500", weight: 3};
+                    case 'Tornado Warning': return {color: "#FF0000", weight: 3};
+                    case 'Extreme Wind Warning' return {color: "#FF8C00", weight: 3};
+                    case 'Special Marine Warning': return  {color: "#FFA500", weight: 2};
+                    case 'Flash Flood Warning': return {color: "#8B0000", weight: 2};
+                    case 'Flood Warning': return {color: "#00FF00"};
+                    case 'Flood Advisory': return {color: "#00FF7F"};
+                    case 'Snow Squall Warning': return {color: "#C71585"};
+                    case 'Dust Storm Warning': return {color: "#FFE4C4"};
+                    case 'Dust Advisory': return {color: "#BDB76B"};
+                    
+                }
+                return {color: alertColor, weight: alertWeight}
             },
             // Popup for each feature. Alert name and headline
             onEachFeature: function(feature,layer) {
