@@ -30,7 +30,7 @@ function init() {
    });
         
     var nwsAlerts = new L.WFS({
-        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?',
+        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer',
         typeNS: "esri",
         typeName: "esri:WatchesWarnings",
         version: "2.2.0",
