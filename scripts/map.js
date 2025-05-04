@@ -29,21 +29,24 @@ function init() {
         transparent: true
    });
 
+    // Retrieve NWS Warnings from the Weather.gov API
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
-    
     var nwsAlerts = L.geoJSON(null, {
-      style: {
-        color: 'purple',
-        weight: 1,
-        opacity: 0.6,
-        fillOpacity: 0.2
-      },
-      onEachFeature: function (feature, layer) {
-        const props = feature.properties;
-        layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
-      }
+        style: function(feature) {
+            switch (feature.properties.event) {
+                case 'Red Flag Warning': return {fillColor: "#FF1493"};
+                case 'Winter Weather Advisory': return {fillColor: "#7B68EE", fillOpacity: "0.6"};
+                case 'Flood Watch': return {fillColor: "#2E8B57", fillOpacity: "0.6"};
+                case 'Wind Advisory': return {fillColor: "#D2B48C", fillOpacity: "0.6"};
+            }
+        },
+        onEachFeature: function(feature,layer) {
+            var props = feature.properties;
+            layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
+        }
     });
-    
+
+    // Get the NWS alert data. Get response as json then add to nwsAlerts
     fetch(nwsAlertsAPI)
       .then(res => res.json())
       .then(data => nwsAlerts.addData(data));
