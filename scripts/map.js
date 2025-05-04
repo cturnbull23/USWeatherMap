@@ -29,48 +29,23 @@ function init() {
         transparent: true
    });
 
-    // Define NWS Alert styles for each alert type ("event")
-    var alertStyle = {
-        "Red Flag Warning": {color: "black", fillColor: "#FF1493", fillOpacity: "0.6", weight: 1},
-        "Winter Weather Advisory": {color: "black", fillColor: "#7B68EE", fillOpacity: "0.6", weight: 1},
-        "Flood Watch": {color: "black", fillColor: "#2E8B57", fillOpacity: "0.6", weight: 1},
-        "Wind Advisory": {color: "black", fillColor: "#D2B48C", fillOpacity: "0.6", weight: 1},
-        "Flood Advisory": {color: "black", fillColor: "#00FF7F", fillOpacity: "0.6", weight: 1}
-    };
-
-    function getAlertStyle(alertName) {
-        return alertStyle[alertName] || {
-            color: "black", // fallback styles
-            fillColor: "purple",
-            weight: 1
-        };
-    }
-    
-    // Set up nwsAlerts variable
+    // NWS Alerts
+    // Currently does not show countywide alerts
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
-    var nwsAlerts = L.geoJSON(null, {
-        style: function(feature) {
-            var alert = feature.properties.event;
-            var style = getAlertStyle(alert);
-            return {
-                fillColor: style.fillColor,
-                fillOpacity: style.fillOpacity,
-                weight: style.weight,
-                
-            };
-        },
-        onEachFeature: function(feature,layer) {
-            var props = feature.properties;
-            layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
-        }
+    $.getJSON(nwsAlertsAPI, function(data) {
+        L.geoJSON(data, {
+            style: function(feature) {
+                var alertColor = 'orange';
+                if (feature.properties.severe === 'Severe') alertColor = 'red';
+                return {color: alertColor}
+            },
+            // Popup for each feature. Alert name and headline
+            onEachFeature: function(feature,layer) {
+                var props = feature.properties;
+                layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
+            }
+        }).addTo(map);
     });
-
-    // Get the NWS alert data. Get response as json then add to nwsAlerts
-    fetch(nwsAlertsAPI)
-      .then(res => res.json())
-      .then(data => nwsAlerts.addData(data));
-    
-    nwsAlerts.addTo(map);
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
