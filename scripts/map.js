@@ -62,15 +62,21 @@ function init() {
             fill: false
         };
     }
+
+    function usCountiesStyle(feature) {
+        return {
+            color: "#232323",
+            weight: 0.98,
+            fill: false
+        };
+    }
     
     var usStates = new L.geoJSON(usStatesJson, {
         style: usStatesStyle
     }).addTo(map);
     
-    var usCounties = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'GEOG585:usCounties4326',
-        format: 'image/png',
-        transparent: true
+    var usCounties = new L.geoJSON(usCountiesJson, {
+        style: usCountiesStyle
     }).addTo(map);
     
     var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
