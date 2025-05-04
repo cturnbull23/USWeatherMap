@@ -30,13 +30,19 @@ function init() {
    });
         
     var nwsAlerts = new L.WFS({
-        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?service=WFS',
-        typeName: "watch_warn_adv:CurrentWarnings",
-        crs: L.CRS.EPSG3857
-    }).addTo(map)
-      .on('load', function() {
-          map.fitBounds(nwsAlerts);
-      })
+        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer',
+        typeNS: "esri",
+        typeName: "esri:WatchesWarnings",
+        geometryField: 'SHAPE',
+        crs: L.CRS.EPSG4326,
+        showAll: true,
+        style: {
+            color: "ff7800",
+            weight: 2,
+            opacity: 0.8,
+            fillOpacity: 0.1
+        }
+    }).addTo(map);
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
