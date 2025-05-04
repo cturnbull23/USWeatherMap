@@ -85,6 +85,7 @@ function init() {
                 case 'High': return {color: "#ff7fff"};
             }
             return {color: outlookColor}
+            console.log(feature.properties);
         },
         onEachFeature: function(feature,layer) {
             layer.bindPopup(`Risk Level: ${feature.properties.db}`);
