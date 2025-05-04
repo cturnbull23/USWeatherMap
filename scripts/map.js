@@ -75,15 +75,15 @@ function init() {
                     case 'High Risk': return {color: "#ff7fff"};
                 }
                 return {color: outlookColor}
-            };
-        },
-        onEachFeature: function(feature,layer) {
-            if (feature.properties && feature.properties.label) {
-                layer.bindPopup(`Risk Level: ${feature.properties.label}`);
+            },
+            onEachFeature: function(feature,layer) {
+                if (feature.properties && feature.properties.label) {
+                    layer.bindPopup(`Risk Level: ${feature.properties.label}`);
+                }
             }
-        }
-    }).addTo(map);
-
+        }).addTo(map); 
+    });
+    
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
         layers: 'nexrad-n0r',
