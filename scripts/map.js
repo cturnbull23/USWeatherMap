@@ -77,15 +77,14 @@ function init() {
         style: function(feature) {
             var outlookColor = 'gray'; // if unknown
             switch (feature.properties.dn) {
-                case '2': return {color: "#c0e8c0"};
-                case '3':  return {color: "#7fc57f"};
-                case '4': return {color: "#f6f67f"};
-                case '5': return {color: "#e6c27f"};
-                case '6': return {color: "#e67f7f"};
-                case '8': return {color: "#ff7fff"};
+                case 2: return {color: "#c0e8c0"};
+                case 3:  return {color: "#7fc57f"};
+                case 4: return {color: "#f6f67f"};
+                case 5: return {color: "#e6c27f"};
+                case 6: return {color: "#e67f7f"};
+                case 8: return {color: "#ff7fff"};
             }
             return {color: outlookColor}
-            console.log(feature.properties);
         },
         onEachFeature: function(feature,layer) {
             layer.bindPopup(`Risk Level: ${feature.properties.db}`);
