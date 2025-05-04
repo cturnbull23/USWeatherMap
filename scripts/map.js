@@ -87,7 +87,7 @@ function init() {
             return {color: outlookColor}
         },
         onEachFeature: function(feature,layer) {
-            layer.bindPopup(`Risk Level: ${feature.properties.db}`);
+            layer.bindPopup(`Risk Level: ${feature.properties.dn}`);
         }
     });
     layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook")
