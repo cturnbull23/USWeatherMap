@@ -87,7 +87,27 @@ function init() {
             return {color: outlookColor}
         },
         onEachFeature: function(feature,layer) {
-            layer.bindPopup(`Risk Level: ${feature.properties.dn}`);
+            var content = ''
+            switch (feature.properties.dn) {
+                case 2: 
+                    content = '<strong>General Thunderstorm Risk</strong>';
+                    break;
+                case 3:
+                    content = '<strong>Marginal Risk</strong>';
+                    break;
+                case 4:
+                    content = '<strong>Slight Risk</strong>';
+                    break;
+                case 5:
+                    content = '<strong>Enhanced Risk</strong>';
+                    break;
+                case 6:
+                    content = '<strong>Moderate Risk</strong>';
+                    break;
+                case 8:
+                    content = '<strong>High Risk</strong>';
+            }
+            layer.bindPopup(`Risk Level: ${content}`);
         }
     });
     layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook")
