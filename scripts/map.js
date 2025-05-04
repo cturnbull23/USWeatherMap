@@ -10,12 +10,6 @@ function init() {
         zoom: 5
     });
     
-    // ESRI World Street tiles
-    var worldStreetMapESRI = L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-        format: 'image/png',
-        transparent: true
-    });
-    
     // Iowa Mesonet WMS - Channel 2 Visible Satellite (GOES-19)
     var satelliteCh02 = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/goes_east.cgi', {
         layers: 'conus_ch02',
@@ -28,6 +22,21 @@ function init() {
         format: 'image/png',
         transparent: true
    });
+
+    // define basemap and thematic layers and add layer switcher control
+    var basemaps = {
+        "GOES-19 Channel 2: Visible (red)": satelliteCh02,
+        "GOES-19 Channel 7: Shortwave IR": satelliteCh07
+    };
+
+    var overlays = {};
+    var layerControl = L.control.layers(basemaps,overlays).addTo(map);
+
+    // ESRI World Street tiles
+    var worldStreetMapESRI = L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        format: 'image/png',
+        transparent: true
+    });
 
     // NWS Alerts
     // Currently does not show countywide alerts, only polygons
@@ -81,15 +90,19 @@ function init() {
             layer.bindPopup(`Risk Level: ${feature.properties.label}`);
         }
     });
+    layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook")
+    
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
         layers: 'nexrad-n0r',
         format: 'image/png',
         transparent: true
     }).addTo(map);
+    layerControl.addOverlay(nwsRadar, "National Weather Service Radar");
     
     // United States basemap from AWS S3    
     var usBasemap = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/USBasemap3/{z}/{x}/{y}.png'); 
+    layerControl.addOverlay(usBasemap, "Custom US Basemap");
     
     function usStatesStyle(feature) {
         return {
@@ -110,12 +123,15 @@ function init() {
     var usCounties = new L.geoJSON(usCountiesJson, {
         style: usCountiesStyle
     }).addTo(map);
+    layerControl.addOverlay(usCounties, "US Counties");
 
     var usStates = new L.geoJSON(usStatesJson, {
         style: usStatesStyle
     }).addTo(map);
+    layerControl.addOverlay(usStates, "US States");
 
     var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
+    layerControl.addOverlay(townCityLabels, "Place Names");
 
     // variables for airports features for selection
     var airportsLayer;
@@ -155,30 +171,12 @@ function init() {
         },
         onEachFeature: airportsOnEachFeature
     }).addTo(map);
+    layerControl.addOverlay(airportsLayer, "US Airports");
     
     var selectedAirportsIcon = L.icon({
         iconUrl: '/images/airport_selected.svg',
         iconSize: [40,40]
     });
-    
-    // define basemap and thematic layers and add layer switcher control
-    var basemaps = {
-        "GOES-19 Channel 2: Visible (red)": satelliteCh02,
-        "GOES-19 Channel 7: Shortwave IR": satelliteCh07
-    };
-    
-    var overlays = {
-        "Custom Basemap": usBasemap,
-        "ESRI World Street Map": worldStreetMapESRI,
-        "US Counties": usCounties,
-        "US States": usStates,
-        "SPC Day 1 Convective Outlook": spcCategorical,
-        "Airports": airportsLayer,
-        "NWS Radar": nwsRadar,
-        "Places": townCityLabels
-    };
-    
-    var layerControl = L.control.layers(basemaps,overlays).addTo(map);
     
     // handle clicks on the map that don't hit a feature
     map.addEventListener('click', function(e) {
