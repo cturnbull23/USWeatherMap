@@ -32,9 +32,9 @@ function init() {
     // NWS Alerts
     // Currently does not show countywide alerts, only polygons
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
-    var nwsAlerts = [];
-    var nwsAlerts = $.getJSON(nwsAlertsAPI, function(data) {
-       nwsAlerts = L.geoJSON(data, {
+    var nwsAlerts;
+    $.getJSON(nwsAlertsAPI, function(data) {
+       nwsAlerts =  L.geoJSON(data, {
            style: function(feature) {
                 var alertColor = 'purple';
                 var alertWeight = 1
@@ -59,6 +59,7 @@ function init() {
                 layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
             }
         }).addTo(map);
+        
     });
 
     // Storm Prediction Center Day 1 Categorical Outlook
