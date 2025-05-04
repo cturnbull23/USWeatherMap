@@ -1,5 +1,5 @@
 #mapid {
-    height: 100%;
+    height: 90%;
     width: auto;
     border: 1px solid #ccc;
 }
@@ -31,7 +31,7 @@ html, body{
 }
 
 body {
-    padding-top: 60px;
+    padding-top: 0px;
     padding-bottom: 40px;
 }
 
