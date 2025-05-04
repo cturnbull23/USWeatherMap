@@ -38,7 +38,7 @@ function init() {
     };
 
     function getAlertStyle(alertName) {
-        return eventStyles[alertName] || {
+        return alertStyle[alertName] || {
             color: "black", // fallback styles
             fillColor: "purple",
             weight: 1
