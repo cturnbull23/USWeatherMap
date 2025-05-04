@@ -31,10 +31,11 @@ function init() {
 
     // Define NWS Alert styles for each alert type ("event")
     var alertStyle = {
-        "Red Flag Warning": {fillColor: "#FF1493", fillOpacity: "0.6", weight: 1},
-        "Winter Weather Advisory": {fillColor: "#7B68EE", fillOpacity: "0.6", weight: 1},
-        "Flood Watch": {fillColor: "#2E8B57", fillOpacity: "0.6", weight: 1},
-        "Wind Advisory": {fillColor: "#D2B48C", fillOpacity: "0.6", weight: 1}
+        "Red Flag Warning": {color: "black", fillColor: "#FF1493", fillOpacity: "0.6", weight: 1},
+        "Winter Weather Advisory": {color: "black", fillColor: "#7B68EE", fillOpacity: "0.6", weight: 1},
+        "Flood Watch": {color: "black", fillColor: "#2E8B57", fillOpacity: "0.6", weight: 1},
+        "Wind Advisory": {color: "black", fillColor: "#D2B48C", fillOpacity: "0.6", weight: 1},
+        "Flood Advisory": {color: "black", fillColor: "#00FF7F", fillOpacity: "0.6", weight: 1}
     };
 
     function getAlertStyle(alertName) {
