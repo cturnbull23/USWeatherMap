@@ -77,7 +77,7 @@ function init() {
         style: function(feature) {
             var outlookColor = 'gray'; // if unknown
             switch (feature.properties.label) {
-                case 'Thunderstorm ': return {color: "#c0e8c0"};
+                case 'Thunderstorm': return {color: "#c0e8c0"};
                 case 'Marginal':  return {color: "#7fc57f"};
                 case 'Slight': return {color: "#f6f67f"};
                 case 'Enhanced': return {color: "#e6c27f"};
