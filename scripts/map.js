@@ -48,7 +48,7 @@ function init() {
                     case 'Snow Squall Warning': return {color: "#C71585"};
                     case 'Dust Storm Warning': return {color: "#FFE4C4"};
                     case 'Dust Advisory': return {color: "#BDB76B"};
-                    
+                    case 'Marine Weather Statement': return {color: "#FFDAB9"};
                 }
                 return {color: alertColor, weight: alertWeight}
             },
