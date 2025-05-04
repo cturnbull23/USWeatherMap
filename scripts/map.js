@@ -31,16 +31,11 @@ function init() {
         
     var nwsAlerts = new L.WFS({
         url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?request=GetCapabilities&service=WFS',
-        crs: L.CRS.EPSG3857,
-        style: {
-            fillColor: "#232323"
-        }
-    });
-
-    L.Proj.geoJson(nwsAlerts).addTo(map)
-                             .on('load', function() { 
-                                 map.fitBounds(nwsAlerts);
-                             })
+        crs: L.CRS.EPSG4326
+    }).addTo(map)
+      .on('load', function() {
+          map.fitBounds(nwsAlerts);
+      })
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
