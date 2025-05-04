@@ -32,9 +32,8 @@ function init() {
     // NWS Alerts
     // Currently does not show countywide alerts, only polygons
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
-    var nwsAlerts;
-    $.getJSON(nwsAlertsAPI, function(data) {
-       nwsAlerts =  L.geoJSON(data, {
+    var nwsAlerts = $.getJSON(nwsAlertsAPI, function(data) {
+        L.geoJSON(data, {
            style: function(feature) {
                 var alertColor = 'purple';
                 var alertWeight = 1
@@ -59,9 +58,6 @@ function init() {
                 layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
             }
         }).addTo(map);
-
-        // Dynamically add nwsAlerts to the control
-        layerControl.addOverLay(nwsAlerts, "NWS Alerts")
     });
 
     // Storm Prediction Center Day 1 Categorical Outlook
@@ -177,6 +173,7 @@ function init() {
         "SPC Day 1 Convective Outlook": spcCategorical,
         "Airports": airportsLayer,
         "NWS Radar": nwsRadar,
+        "NWS Alerts": nwsAlerts,
         "Places": townCityLabels
     };
     
