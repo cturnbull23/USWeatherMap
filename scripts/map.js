@@ -28,14 +28,19 @@ function init() {
         format: 'image/png',
         transparent: true
    });
-    
-    // National Weather Service Alerts
-    var nwsAlerts = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'GEOG585:NWSAlerts',
-        format: 'image/png',
-        transparent: true,
-        opacity: 0.85
-    });
+        
+    var nwsAlerts = new L.WFS({
+        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?request=GetCapabilities&service=WFS
+        typeNS: 'nwsalerts',
+        typeName: 'nws_watches_warnings_advisories',
+        crs: L.CRS.EPSG4326,
+        style: function(feature) {
+            switch (feature.properties.Hazard_Type) {
+                case 'Red Flag Warning': return {fillColor: "#FF1493", fillOpacity: 0.5};
+                case 'Winter Weather Advisory': return {fillColor: "#7B68EE", fillOpacity: 0.5};
+            }
+        }
+    }).addTo(map);
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
