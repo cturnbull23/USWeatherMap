@@ -30,7 +30,7 @@ function init() {
    });
 
     // NWS Alerts
-    // Currently does not show countywide alerts
+    // Currently does not show countywide alerts, only polygons
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
     $.getJSON(nwsAlertsAPI, function(data) {
         L.geoJSON(data, {
@@ -61,12 +61,28 @@ function init() {
     });
 
     // Storm Prediction Center Day 1 Categorical Outlook
-    var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
-        layers: 'GEOG585:SPCDay1Outlook',
-        format: 'image/png',
-        styles: 'spcCategoricalOutlook',
-        transparent: true
-    });
+    var spcDay1CatAPI = 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer/0/query?where=1=1&outFields=*&f=geojson';
+    $.getJSON(spcDay1CatAPI, function(data) {
+        L.geoJSON(data, {
+            style: function(feature) {
+                var outlookColor = 'gray'; // if unknown
+                switch (feature.properties.label) {
+                    case 'General Thunderstorm Risk': return {color: "#c0e8c0"};
+                    case 'Marginal Risk':  return {color: "#7fc57f"};
+                    case 'Slight Risk': return {color: "#f6f67f"};
+                    case 'Enhanced Risk': return {color: "#e6c27f"};
+                    case 'Moderate Risk': return {color: "#e67f7f"};
+                    case 'High Risk': return {color: "#ff7fff"};
+                }
+                return {color: outlookColor}
+            };
+        },
+        onEachFeature: function(feature,layer) {
+            if (feature.properties && feature.properties.label) {
+                layer.bindPopup(`Risk Level: ${feature.properties.label}`);
+            }
+        }
+    }).addTo(map);
 
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
