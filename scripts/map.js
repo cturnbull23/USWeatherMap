@@ -71,12 +71,12 @@ function init() {
         };
     }
     
-    var usStates = new L.geoJSON(usStatesJson, {
-        style: usStatesStyle
-    }).addTo(map);
-    
     var usCounties = new L.geoJSON(usCountiesJson, {
         style: usCountiesStyle
+    }).addTo(map);
+
+    var usStates = new L.geoJSON(usStatesJson, {
+        style: usStatesStyle
     }).addTo(map);
 
     var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
