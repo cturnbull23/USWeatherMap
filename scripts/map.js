@@ -40,7 +40,7 @@ function init() {
                 switch (feature.properties.event) {
                     case 'Severe Thunderstorm Warning': return {color: "#FFA500", weight: 3};
                     case 'Tornado Warning': return {color: "#FF0000", weight: 3};
-                    case 'Extreme Wind Warning' return {color: "#FF8C00", weight: 3};
+                    case 'Extreme Wind Warning': return {color: "#FF8C00", weight: 3};
                     case 'Special Marine Warning': return  {color: "#FFA500", weight: 2};
                     case 'Flash Flood Warning': return {color: "#8B0000", weight: 2};
                     case 'Flood Warning': return {color: "#00FF00"};
