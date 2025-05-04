@@ -77,12 +77,12 @@ function init() {
         style: function(feature) {
             var outlookColor = 'gray'; // if unknown
             switch (feature.properties.label) {
-                case 'General Thunderstorm Risk': return {color: "#c0e8c0"};
-                case 'Marginal Risk':  return {color: "#7fc57f"};
-                case 'Slight Risk': return {color: "#f6f67f"};
-                case 'Enhanced Risk': return {color: "#e6c27f"};
-                case 'Moderate Risk': return {color: "#e67f7f"};
-                case 'High Risk': return {color: "#ff7fff"};
+                case 'Thunderstorm ': return {color: "#c0e8c0"};
+                case 'Marginal':  return {color: "#7fc57f"};
+                case 'Slight': return {color: "#f6f67f"};
+                case 'Enhanced': return {color: "#e6c27f"};
+                case 'Moderate': return {color: "#e67f7f"};
+                case 'High': return {color: "#ff7fff"};
             }
             return {color: outlookColor}
         },
