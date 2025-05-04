@@ -32,7 +32,7 @@ function init() {
     // Add NWS Watches, Warnings, and Advisories from NOAA's WFS
     var nwsUrl = `https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?service=WFS&version=2.2.0&request=GetFeature&typeName=esri:WatchesWarnings&outputFormat=application/json`;
 
-    const nwsLayer = new L.GeoJSON.AJAX(nwsUrl, {
+    var nwsAlerts = new L.GeoJSON.AJAX(nwsUrl, {
       style: {
         color: 'blue',
         weight: 1,
@@ -40,7 +40,7 @@ function init() {
         fillOpacity: 0.1
       },
       onEachFeature: function (feature, layer) {
-        const props = feature.properties;
+        var props = feature.properties;
         layer.bindPopup(`<strong>${props.EVENT}</strong><br>${props.ISSUED}`);
       }
     }).addTo(map);
