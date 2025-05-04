@@ -63,10 +63,9 @@ function init() {
         };
     }
     
-    var usStates = L.geoJSON(usStatesJson, {
+    var usStates = new L.geoJSON(usStatesJson, {
         style: usStatesStyle
-    });
-    usStates.addTo(map);
+    }).addTo(map);
     
     var usCounties = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
         layers: 'GEOG585:usCounties4326',
