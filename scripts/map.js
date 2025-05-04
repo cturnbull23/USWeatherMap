@@ -76,7 +76,7 @@ function init() {
     
     // create icons for airports (selected and unselected)
     var airportsIcon = L.icon({
-        iconUrl: '/USWeatherMap/images/airport.svg',
+        iconUrl: '/images/airport.svg',
         iconSize: [20,20]
     });
     
@@ -109,7 +109,7 @@ function init() {
     }).addTo(map);
     
     var selectedAirportsIcon = L.icon({
-        iconUrl: '/USWeatherMap/images/airport_selected.svg',
+        iconUrl: '/images/airport_selected.svg',
         iconSize: [40,40]
     });
     

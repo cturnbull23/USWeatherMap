@@ -1,5 +1,5 @@
 #mapid {
-    height: 100%;
+    height: 80%;
     width: auto;
     border: 1px solid #ccc;
 }
@@ -24,14 +24,13 @@ a {
 html, body{
     height: 100%;
     width: 100%;
-    overflow: hidden;
     background-color: Canvas;
     color: CanvasText;
     color-scheme: light dark;
 }
 
 body {
-    padding-top: 60px;
+    padding-top: 0px;
     padding-bottom: 40px;
 }
 
