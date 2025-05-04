@@ -29,16 +29,34 @@ function init() {
         transparent: true
    });
 
-    // Retrieve NWS Warnings from the Weather.gov API
+    // Define NWS Alert styles for each alert type ("event")
+    var alertStyle = {
+        "Red Flag Warning": {fillColor: "#FF1493", fillOpacity: "0.6", weight: 1},
+        "Winter Weather Advisory": {fillColor: "#7B68EE", fillOpacity: "0.6", weight: 1},
+        "Flood Watch": {fillColor: "#2E8B57", fillOpacity: "0.6", weight: 1},
+        "Wind Advisory": {fillColor: "#D2B48C", fillOpacity: "0.6", weight: 1}
+    };
+
+    function getAlertStyle(alertName) {
+        return eventStyles[alertName] || {
+            color: "black", // fallback styles
+            fillColor: "purple",
+            weight: 1
+        };
+    }
+    
+    // Set up nwsAlerts variable
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
     var nwsAlerts = L.geoJSON(null, {
         style: function(feature) {
-            switch (feature.properties.event) {
-                case 'Red Flag Warning': return {fillColor: "#FF1493"};
-                case 'Winter Weather Advisory': return {fillColor: "#7B68EE", fillOpacity: "0.6"};
-                case 'Flood Watch': return {fillColor: "#2E8B57", fillOpacity: "0.6"};
-                case 'Wind Advisory': return {fillColor: "#D2B48C", fillOpacity: "0.6"};
-            }
+            var alert = feature.properties.event;
+            var style = getAlertStyle(alert);
+            return {
+                fillColor: style.fillColor,
+                fillOpacity: style.fillOpacity,
+                weight: style.weight,
+                
+            };
         },
         onEachFeature: function(feature,layer) {
             var props = feature.properties;
