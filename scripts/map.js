@@ -59,7 +59,7 @@ function init() {
                 layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
             }
         }).addTo(map);
-        
+        layerControl.addOverlay(nwsAlerts, "NWS Alerts")
     });
 
     // Storm Prediction Center Day 1 Categorical Outlook
@@ -175,11 +175,10 @@ function init() {
         "SPC Day 1 Convective Outlook": spcCategorical,
         "Airports": airportsLayer,
         "NWS Radar": nwsRadar,
-        "NWS Alerts": nwsAlerts,
         "Places": townCityLabels
     };
     
-    L.control.layers(basemaps,overlays).addTo(map);
+    var layerControl = L.control.layers(basemaps,overlays).addTo(map);
     
     // handle clicks on the map that don't hit a feature
     map.addEventListener('click', function(e) {
