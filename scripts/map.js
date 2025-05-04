@@ -29,21 +29,26 @@ function init() {
         transparent: true
    });
 
-    // Add NWS Watches, Warnings, and Advisories from NOAA's WFS
-    var nwsUrl = `https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?service=WFS&version=2.2.0&request=GetFeature&typeName=esri:WatchesWarnings&outputFormat=application/json`;
-
-    var nwsAlerts = new L.GeoJSON.AJAX(nwsUrl, {
+    var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
+    
+    var nwsAlerts = L.geoJSON(null, {
       style: {
-        color: 'blue',
+        color: 'purple',
         weight: 1,
-        opacity: 0.7,
-        fillOpacity: 0.1
+        opacity: 0.6,
+        fillOpacity: 0.2
       },
       onEachFeature: function (feature, layer) {
-        var props = feature.properties;
-        layer.bindPopup(`<strong>${props.EVENT}</strong><br>${props.ISSUED}`);
+        const props = feature.properties;
+        layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
       }
-    }).addTo(map);
+    });
+    
+    fetch(nwsGeoJsonUrl)
+      .then(res => res.json())
+      .then(data => nwsAlerts.addData(data));
+    
+    nwsAlerts.addTo(map);
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.tileLayer.wms('http://localhost:8080/geoserver/GEOG585/wms', {
