@@ -73,7 +73,7 @@ function init() {
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.esri.featureLayer({
-        url: 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer/0',
+        url: 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer',
         style: function(feature) {
             var outlookColor = 'gray'; // if unknown
             switch (feature.properties.label) {
