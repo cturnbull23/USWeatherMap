@@ -33,8 +33,8 @@ function init() {
         url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?',
         typeNS: "esri",
         typeName: "esri:WatchesWarnings",
-        version: 2.2.0,
-        geometryField: 'shape',
+        version: "2.2.0",
+        geometryField: "shape",
         crs: L.CRS.EPSG4326,
         showAll: true,
         style: {
