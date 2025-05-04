@@ -63,7 +63,7 @@ function init() {
         };
     }
     
-    var usStates = L.geoJSON(usStatesJson, {
+    var usStates = new L.geoJSON(usStatesJson, {
         style: usStatesStyle
     }).addTo(map);
     
