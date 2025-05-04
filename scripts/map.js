@@ -30,7 +30,7 @@ function init() {
    });
         
     var nwsAlerts = new L.WFS({
-        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer?request=GetCapabilities&service=WFS',
+        url: 'https://mapservices.weather.noaa.gov/eventdriven/services/WWA/watch_warn_adv/MapServer/WFSServer',
         crs: L.CRS.EPSG4326
     }).addTo(map)
       .on('load', function() {
