@@ -76,7 +76,7 @@ function init() {
         url: 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer/1',
         style: function(feature) {
             var outlookColor = 'gray'; // if unknown
-            switch (feature.properties.Outlook) {
+            switch (feature.properties.dn) {
                 case 'Thunderstorm': return {color: "#c0e8c0"};
                 case 'Marginal':  return {color: "#7fc57f"};
                 case 'Slight': return {color: "#f6f67f"};
@@ -87,7 +87,7 @@ function init() {
             return {color: outlookColor}
         },
         onEachFeature: function(feature,layer) {
-            layer.bindPopup(`Risk Level: ${feature.properties.Outlook}`);
+            layer.bindPopup(`Risk Level: ${feature.properties.db}`);
         }
     });
     layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook")
