@@ -24,7 +24,6 @@ a {
 html, body{
     height: 100%;
     width: 100%;
-    overflow: hidden;
     background-color: Canvas;
     color: CanvasText;
     color-scheme: light dark;
