@@ -40,7 +40,7 @@ function init() {
        nwsAlerts =  L.geoJSON(data, {
            style: function(feature) {
                 var alertColor = 'purple';
-                var alertWeight = 1
+                var alertWeight = 1;
                 switch (feature.properties.event) {
                     case 'Severe Thunderstorm Warning': return {color: "#FFA500", weight: 3};
                     case 'Tornado Warning': return {color: "#FF0000", weight: 3};
@@ -54,7 +54,7 @@ function init() {
                     case 'Dust Advisory': return {color: "#BDB76B"};
                     case 'Marine Weather Statement': return {color: "#FFDAB9"};
                 }
-                return {color: alertColor, weight: alertWeight}
+                return {color: alertColor, weight: alertWeight};
             },
             // Popup for each feature. Alert name and headline
             onEachFeature: function(feature,layer) {
@@ -62,7 +62,7 @@ function init() {
                 layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
             }
         }).addTo(map);
-        layerControl.addOverlay(nwsAlerts, "NWS Alerts")
+        layerControl.addOverlay(nwsAlerts, "NWS Alerts");
     });
 
     // Storm Prediction Center Day 1 Categorical Outlook
@@ -78,10 +78,10 @@ function init() {
                 case 6: return {color: "#e67f7f"};
                 case 8: return {color: "#ff7fff"};
             }
-            return {color: outlookColor}
+            return {color: outlookColor};
         },
         onEachFeature: function(feature,layer) {
-            var content = ''
+            var content = '';
             switch (feature.properties.dn) {
                 case 2: 
                     content = '<strong>General Thunderstorm Risk</strong>';
@@ -104,7 +104,7 @@ function init() {
             layer.bindPopup(`Risk Level: ${content}`);
         }
     });
-    layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook")
+    layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook");
     
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
