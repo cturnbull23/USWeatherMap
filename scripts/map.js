@@ -33,14 +33,15 @@ function init() {
     var overlays = {};
     var layerControl = L.control.layers(basemaps,overlays).addTo(map);
 
-    // Get NWS Alerts asynchronously... countywide alerts are not displaying (geometry issue?)
+    // Create function to get NWS Alerts asynchronously...
+    // Countywide alerts are not displaying (geometry issue?)
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
     var nwsAlerts;
 
     function getNWSAlerts() {
         $.getJSON(nwsAlertsAPI, function(data) {
 
-            // If layer already exists, remove it
+            // Remove any existing layer
             if (nwsAlerts) {
                 map.removeLayer(nwsAlerts);
                 layerControl.removeLayer(nwsAlerts);
@@ -76,53 +77,69 @@ function init() {
         });
     }
 
-    // Get the NWS Alerts
+    // Call the function to get the NWS Alerts
     getNWSAlerts();
 
     // Get new data every 5 minutes (300,000 ms)
     setInterval(getNWSAlerts, 300000);
 
-    // Storm Prediction Center Day 1 Categorical Outlook
-    var spcCategorical = L.esri.featureLayer({
-        url: 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer/1',
-        style: function(feature) {
-            var outlookColor = 'gray'; // if unknown
-            switch (feature.properties.dn) {
-                case 2: return {color: "#c0e8c0"};
-                case 3:  return {color: "#7fc57f"};
-                case 4: return {color: "#f6f67f"};
-                case 5: return {color: "#e6c27f"};
-                case 6: return {color: "#e67f7f"};
-                case 8: return {color: "#ff7fff"};
-            }
-            return {color: outlookColor};
-        },
-        // Popup information... custom because the dataset only uses a number not the risk name
-        onEachFeature: function(feature,layer) {
-            var content = '';
-            switch (feature.properties.dn) {
-                case 2: 
-                    content = '<strong>General Thunderstorm Risk</strong>';
-                    break;
-                case 3:
-                    content = '<strong>Marginal Risk</strong>';
-                    break;
-                case 4:
-                    content = '<strong>Slight Risk</strong>';
-                    break;
-                case 5:
-                    content = '<strong>Enhanced Risk</strong>';
-                    break;
-                case 6:
-                    content = '<strong>Moderate Risk</strong>';
-                    break;
-                case 8:
-                    content = '<strong>High Risk</strong>';
-            }
-            layer.bindPopup(`Risk Level: ${content}`);
+    // Create function to asynchronously get SPC Day 1 Categorical Outlook
+    var spcCategorical;
+
+    function getSPCOutlook() {
+        // Remove any existing layer
+        if (spcCategorical) {
+            map.removeLayer(spcCategorical);
+            layerControl.removeLayer(spcCategorical);
         }
-    });
-    layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook");
+
+        spcCategorical = L.esri.featureLayer({
+            url: 'https://mapservices.weather.noaa.gov/vector/rest/services/outlooks/SPC_wx_outlks/FeatureServer/1',
+            style: function(feature) {
+                var outlookColor = 'gray'; // if unknown
+                switch (feature.properties.dn) {
+                    case 2: return {color: "#c0e8c0"};
+                    case 3:  return {color: "#7fc57f"};
+                    case 4: return {color: "#f6f67f"};
+                    case 5: return {color: "#e6c27f"};
+                    case 6: return {color: "#e67f7f"};
+                    case 8: return {color: "#ff7fff"};
+                }
+                return {color: outlookColor};
+            },
+            // Popup information... custom because the dataset only uses a number not the risk name
+            onEachFeature: function(feature,layer) {
+                var content = '';
+                switch (feature.properties.dn) {
+                    case 2:
+                        content = '<strong>General Thunderstorm Risk</strong>';
+                        break;
+                    case 3:
+                        content = '<strong>Marginal Risk</strong>';
+                        break;
+                    case 4:
+                        content = '<strong>Slight Risk</strong>';
+                        break;
+                    case 5:
+                        content = '<strong>Enhanced Risk</strong>';
+                        break;
+                    case 6:
+                        content = '<strong>Moderate Risk</strong>';
+                        break;
+                    case 8:
+                        content = '<strong>High Risk</strong>';
+                }
+                layer.bindPopup(`Risk Level: ${content}`);
+            }
+        });
+        layerControl.addOverlay(spcCategorical, "SPC Day 1 Categorical Outlook");
+    }
+
+    // Call the function to get the SPC Outlook
+    getSPCOutlook();
+
+    // Get new data every hour (3,600,000 ms)
+    setInterval(getSPCOutlook, 3600000);
     
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
@@ -209,10 +226,6 @@ function init() {
         iconUrl: '/images/airport_selected.svg',
         iconSize: [40,40]
     });
-
-    // Labels for towns and cities
-    var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
-    layerControl.addOverlay(townCityLabels, "Place Names");
     
     // handle clicks on the map that don't hit a feature
     map.addEventListener('click', function(e) {
@@ -239,49 +252,10 @@ function init() {
         document.getElementById('summaryLabel').innerHTML = '<table cellpadding:"0" cellspacing:"0"><tr><th>Name</th><th>Identification</th><th>Type</th><th>Wikipedia</th></tr><tr><td>'+featureName+'</td><td>'+ident+'</td><td>'+type+'</td><td><a href="' + wiki +'" target="_blank">'+wiki+'</a></td></tr></table>';
     }
 
+    // Labels for towns and cities
+    var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
+    layerControl.addOverlay(townCityLabels, "Place Names");
+
     // add a scale to the map
     L.control.scale().addTo(map);
-
-    // define event handler function for click events and register it
-    function Identify(e)
-    {
-        // set parameters needed for GetFeatureInfo WMS request
-        var sw = map.options.crs.project(map.getBounds().getSouthWest());
-        var ne = map.options.crs.project(map.getBounds().getNorthEast());
-        var BBOX = sw.x + "," + sw.y + "," + ne.x + "," + ne.y;
-        var WIDTH = map.getSize().x;
-        var HEIGHT = map.getSize().y;
-
-        var X = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).x);
-        var Y = Math.trunc(map.layerPointToContainerPoint(e.layerPoint).y);
-
-        // compose the URL for the request for the NWS Alerts
-        var URL = 'http://localhost:8080/geoserver/GEOG585/wms?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetFeatureInfo&Layers=GEOG585:NWSAlerts&QUERY_LAYERS=GEOG585:NWSAlerts&BBOX='+BBOX+'&FEATURE_COUNT=1&HEIGHT='+HEIGHT+'&WIDTH='+WIDTH+'&INFO_FORMAT=application%2Fjson&TILED=false&CRS=EPSG%3A3857&I='+X+'&J='+Y;
-
-        //send GetFeatureInfo as asynchronous HTTP request using jQuery $.ajax
-        $.ajax({
-            url: URL,
-            dataType: "json",
-            type: "GET",
-            success: function(data)
-            {
-                if(data.features.length !== 0) {  // at least one feature returned in response
-                    var returnedFeature = data.features[0]; // first feature from response
-                    var alertName = returnedFeature.properties.PROD_TYPE;
-                    var alertStart = returnedFeature.properties.ONSET;
-                    var alertEnd = returnedFeature.properties.EXPIRATION;
-
-                   // Set up popup for clicked feature and open it
-                   var popup = new L.Popup({
-                     maxWidth: 300
-                   });
-
-                   popup.setContent("<b>" + alertName + "</b><br />" + "Valid: " + alertStart + "<br> Expires: " + alertEnd);
-                   popup.setLatLng(e.latlng);
-                   map.openPopup(popup);                            
-                }
-            }
-        });
-    }
-    map.addEventListener('click', Identify);
 }
