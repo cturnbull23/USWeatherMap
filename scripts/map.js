@@ -2,8 +2,8 @@ var map;
 
 function init() {
     
-    // create map and set center and zoom level
-    var map = L.map('mapid', {
+    // Create map and set center and zoom levels
+    map = L.map('mapid', {
         center: [38,-96],
         minZoom: 5,
         maxZoom: 10,
@@ -17,13 +17,14 @@ function init() {
         transparent: true
     }).addTo(map);
     
+    // Iowa Mesonet WMS - Channel 7 Shortwave Infrared Satellite (GOES-19)
     var satelliteCh07 = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/goes_east.cgi', {
         layers: 'conus_ch07',
         format: 'image/png',
         transparent: true
    });
 
-    // define basemaps, empty overlays, and add layer switcher control
+    // Define basemaps, create empty overlays variable, create layer switcher control variable
     var basemaps = {
         "GOES-19 Channel 2: Visible (red)": satelliteCh02,
         "GOES-19 Channel 7: Shortwave IR": satelliteCh07
@@ -32,38 +33,54 @@ function init() {
     var overlays = {};
     var layerControl = L.control.layers(basemaps,overlays).addTo(map);
 
-    // NWS Alerts
-    // Currently does not show countywide alerts, only polygons
+    // Get NWS Alerts asynchronously... countywide alerts are not displaying (geometry issue?)
     var nwsAlertsAPI = 'https://api.weather.gov/alerts/active';
     var nwsAlerts;
-    $.getJSON(nwsAlertsAPI, function(data) {
-       nwsAlerts =  L.geoJSON(data, {
-           style: function(feature) {
-                var alertColor = 'purple';
-                var alertWeight = 1;
-                switch (feature.properties.event) {
-                    case 'Severe Thunderstorm Warning': return {color: "#FFA500", weight: 3};
-                    case 'Tornado Warning': return {color: "#FF0000", weight: 3};
-                    case 'Extreme Wind Warning': return {color: "#FF8C00", weight: 3};
-                    case 'Special Marine Warning': return  {color: "#FFA500", weight: 2};
-                    case 'Flash Flood Warning': return {color: "#8B0000", weight: 2};
-                    case 'Flood Warning': return {color: "#00FF00"};
-                    case 'Flood Advisory': return {color: "#00FF7F"};
-                    case 'Snow Squall Warning': return {color: "#C71585"};
-                    case 'Dust Storm Warning': return {color: "#FFE4C4"};
-                    case 'Dust Advisory': return {color: "#BDB76B"};
-                    case 'Marine Weather Statement': return {color: "#FFDAB9"};
-                }
-                return {color: alertColor, weight: alertWeight};
-            },
-            // Popup for each feature. Alert name and headline
-            onEachFeature: function(feature,layer) {
-                var props = feature.properties;
-                layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
+
+    function getNWSAlerts() {
+        $.getJSON(nwsAlertsAPI, function(data) {
+
+            // If layer already exists, remove it
+            if (nwsAlerts) {
+                map.removeLayer(nwsAlerts);
+                layerControl.removeLayer(nwsAlerts);
             }
-        }).addTo(map);
-        layerControl.addOverlay(nwsAlerts, "NWS Alerts");
-    });
+
+            nwsAlerts =  L.geoJSON(data, {
+                style: function(feature) {
+                    var alertColor = 'purple';
+                    var alertWeight = 1;
+                    switch (feature.properties.event) {
+                        case 'Severe Thunderstorm Warning': return {color: "#FFA500", weight: 3};
+                        case 'Tornado Warning': return {color: "#FF0000", weight: 3};
+                        case 'Extreme Wind Warning': return {color: "#FF8C00", weight: 3};
+                        case 'Special Marine Warning': return  {color: "#FFA500", weight: 2};
+                        case 'Flash Flood Warning': return {color: "#8B0000", weight: 2};
+                        case 'Flood Warning': return {color: "#00FF00"};
+                        case 'Flood Advisory': return {color: "#00FF7F"};
+                        case 'Snow Squall Warning': return {color: "#C71585"};
+                        case 'Dust Storm Warning': return {color: "#FFE4C4"};
+                        case 'Dust Advisory': return {color: "#BDB76B"};
+                        case 'Marine Weather Statement': return {color: "#FFDAB9"};
+                        case 'Special Weather Statement': return {color: "#FFE4B5"};
+                    }
+                    return {color: alertColor, weight: alertWeight};
+                },
+                // Popup for each feature. Alert name and headline
+                onEachFeature: function(feature,layer) {
+                    var props = feature.properties;
+                    layer.bindPopup(`<strong>${props.event}</strong><br>${props.headline}`);
+                }
+            }).addTo(map);
+            layerControl.addOverlay(nwsAlerts, "NWS Alerts");
+        });
+    }
+
+    // Get the NWS Alerts
+    getNWSAlerts();
+
+    // Get new data every 5 minutes (300,000 ms)
+    setInterval(getNWSAlerts, 300000);
 
     // Storm Prediction Center Day 1 Categorical Outlook
     var spcCategorical = L.esri.featureLayer({
@@ -80,6 +97,7 @@ function init() {
             }
             return {color: outlookColor};
         },
+        // Popup information... custom because the dataset only uses a number not the risk name
         onEachFeature: function(feature,layer) {
             var content = '';
             switch (feature.properties.dn) {
