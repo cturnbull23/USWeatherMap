@@ -80,8 +80,8 @@ function init() {
     // Call the function to get the NWS Alerts
     getNWSAlerts();
 
-    // Get new data every 5 minutes (300,000 ms)
-    setInterval(getNWSAlerts, 300000);
+    // Get new data every 1 minute1 (60,000 ms)
+    setInterval(getNWSAlerts, 60000);
 
     // Create function to asynchronously get SPC Day 1 Categorical Outlook
     var spcCategorical;
@@ -138,8 +138,8 @@ function init() {
     // Call the function to get the SPC Outlook
     getSPCOutlook();
 
-    // Get new data every hour (3,600,000 ms)
-    setInterval(getSPCOutlook, 3600000);
+    // Get new data every 30 minutes (1,800,000 ms)
+    setInterval(getSPCOutlook, 1800000);
     
     // Nexrad radar from Iowa State Mesonet
     var nwsRadar = L.tileLayer.wms('https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi', {
