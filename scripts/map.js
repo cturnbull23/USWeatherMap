@@ -252,6 +252,11 @@ function init() {
         document.getElementById('summaryLabel').innerHTML = '<table cellpadding:"0" cellspacing:"0"><tr><th>Name</th><th>Identification</th><th>Type</th><th>Wikipedia</th></tr><tr><td>'+featureName+'</td><td>'+ident+'</td><td>'+type+'</td><td><a href="' + wiki +'" target="_blank">'+wiki+'</a></td></tr></table>';
     }
 
+    // attempt to get town and city labels to be above borders... not working
+    map.createPane('labels');
+    map.getPane('labels').style.zIndex = 650;
+    map.getPane('labels').style.pointerEvents = 'none';
+
     // Labels for towns and cities
     var townCityLabels = L.tileLayer('https://geog585-a29bg72.s3.us-east-2.amazonaws.com/townscitieslabels/{z}/{x}/{y}.png').addTo(map);
     layerControl.addOverlay(townCityLabels, "Place Names");
